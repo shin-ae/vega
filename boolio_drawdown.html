@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Embedding Vega-Lite</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.8/vega.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.0.3/vega-lite.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-rc7/vega-embed.js"></script>
+  <style>
+
+  </style>
+</head>
+
+<body>
+
+  <div id="vis"></div>
+
+  <script type="text/javascript">
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    // window.addEventListener("resize", cal);
+
+
+    // function cal() {
+    //   w = window.innerWidth;
+    //   h = window.innerHeight;
+    //   console.log(w);
+    //   console.log(h);
+    // }
+    var yourVlSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+      "description": "Stock prices of 5 Tech Companies over Time.",
+      "width": 600,
+      "height": 400,
+      "data": {
+        "url": "boolio_drawdown.csv"
+      },
+      "mark": "line",
+      "autosize": "fit",
+      "encoding": {
+        "x": {
+          "field": "date",
+          "type": "temporal",
+          "axis": {
+            "format": "%Y-%m",
+            "grid": false,
+            "labelAngle": "320",
+            "tickCount": 12
+          }
+        },
+        "y": {
+          "field": "value",
+          "type": "quantitative",
+          "axis": {
+            "tickCount": 8,
+          }
+        },
+        "color": {
+          "field": "portfolio_name",
+          "type": "nominal",
+          "scale": {
+            "range": ["#6368aa", "#79e0b6", "#45a1af"]
+          }
+        }
+      },
+      "config": {
+        "view": {
+          "stroke": "transparent"
+        }
+      }
+    }
+
+    vegaEmbed("#vis", yourVlSpec, {
+      "renderer": "svg",
+      "actions": {
+        export: true
+      }
+    });
+  </script>
+</body>
+
+</html>

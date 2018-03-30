@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Embedding Vega-Lite</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega/3.0.8/vega.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-lite/2.0.3/vega-lite.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vega-embed/3.0.0-rc7/vega-embed.js"></script>
+  <style>
+
+  </style>
+</head>
+
+<body>
+
+  <div id="vis"></div>
+
+  <script type="text/javascript">
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    // window.addEventListener("resize", cal);
+
+
+    // function cal() {
+    //   w = window.innerWidth;
+    //   h = window.innerHeight;
+    //   console.log(w);
+    //   console.log(h);
+    // }
+    var yourVlSpec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v2.json",
+      "description": "Stock prices of 5 Tech Companies over Time.",
+      "width": 700,
+      "height": 400,
+      "data": {
+        "values": [{
+            "date": "2017-01-01",
+            "setAmount": "0"
+          }, {
+            "date": "2017-02-01",
+            "setAmount": "703"
+          }, {
+            "date": "2017-03-01",
+            "setAmount": "1117"
+          }, {
+            "date": "2017-04-01",
+            "setAmount": "4676"
+          }, {
+            "date": "2017-05-01",
+            "setAmount": "12166"
+          }, {
+            "date": "2017-06-01",
+            "setAmount": "13200"
+          }, {
+            "date": "2017-07-01",
+            "setAmount": "14979"
+          }, {
+            "date": "2017-08-01",
+            "setAmount": "17048"
+          }, {
+            "date": "2017-09-01",
+            "setAmount": "21977"
+          }, {
+            "date": "2017-10-01",
+            "setAmount": "28084"
+          }, {
+            "date": "2017-11-01",
+            "setAmount": "31490"
+          }, {
+            "date": "2017-12-01",
+            "setAmount": "40000"
+          },
+
+        ]
+      },
+      "mark": "line",
+      "autosize": "fit",
+      "encoding": {
+        "x": {
+          "field": "date",
+          "type": "temporal",
+          "axis": {
+            "format": "%Y-%m",
+            "grid": false,
+            "labelAngle": "320",
+            "tickCount": 12
+          }
+        },
+        "y": {
+          "field": "setAmount",
+          "type": "quantitative",
+          "axis": {
+            "tickCount": 12,
+          }
+        },
+        "color": {
+          "value": "#ff775e"
+        }
+      },
+      "config": {
+        "view": {
+          "stroke": "transparent"
+        }
+      }
+    }
+
+    vegaEmbed("#vis", yourVlSpec, {
+      "renderer": "svg",
+      "actions": {
+        export: true
+      }
+    });
+  </script>
+</body>
+
+</html>

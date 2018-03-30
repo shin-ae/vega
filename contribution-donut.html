@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Embedding Vega-Lite</title>
+  <script src="https://vega.github.io/vega/vega.min.js"></script>
+  <script type="text/javascript">
+    var view;
+
+    function render(spec) {
+      view = new vega.View(vega.parse(spec))
+        .renderer('svg') // set renderer (canvas or svg)
+        .initialize('#view') // initialize view within parent DOM container
+        .hover() // enable hover encode set processing
+        .run();
+
+    }
+  </script>
+</head>
+
+<body>
+
+  <div id="view"></div>
+  <button id="btn-download">download SVG</button>
+
+  <script type="text/javascript">
+    var yourVlSpec = {
+      "$schema": "https://vega.github.io/schema/vega/v3.0.json",
+      "width": 200,
+      "height": 200,
+      "autosize": "none",
+
+      "signals": [{
+        "name": "padAngle",
+        "value": 0.026
+      }, {
+        "name": "innerRadius",
+        "value": 74
+      }, {
+        "name": "cornerRadius",
+        "value": 0
+      }],
+
+      "data": [{
+        "name": "table",
+        "values": [{
+          "index": "미국주식",
+          "field": 42.10903874
+        }, {
+          "index": "한국주식",
+          "field": 32.56814921
+
+        }, {
+          "index": "미하이일드",
+          "field": 10.18651363
+
+        }, {
+          "index": "일본주식",
+          "field": 10.18651363
+
+        }, {
+          "index": "기타",
+          "field": 4.949784792
+
+        }],
+        "transform": [{
+          "type": "pie",
+          "field": "field"
+        }]
+      }],
+      "scales": [{
+        "name": "color",
+        "type": "ordinal",
+        // "domain": {
+        //   "data": "table",
+        //   "field": "index"
+        // },
+        "range": ["#febd3a", "#f75d84", "#97d93f", "#6489ae", "#8f56ed"]
+      }, {
+        "name": "value",
+        "type": "sqrt",
+        "domain": {
+          "data": "table",
+          "field": "value"
+        },
+        "zero": true
+      }],
+
+      "marks": [{
+        "type": "arc",
+        "from": {
+          "data": "table"
+        },
+        "encode": {
+          "enter": {
+            "fill": {
+              "scale": "color",
+              "field": "index"
+            },
+            "x": {
+              "signal": "width / 2"
+            },
+            "y": {
+              "signal": "height / 2"
+            }
+          },
+          "update": {
+            "startAngle": {
+              "field": "startAngle"
+            },
+            "endAngle": {
+              "field": "endAngle"
+            },
+            "padAngle": {
+              "signal": "padAngle"
+            },
+            "innerRadius": {
+              "signal": "innerRadius"
+            },
+            "outerRadius": {
+              "signal": "width / 2"
+            },
+            "cornerRadius": {
+              "signal": "cornerRadius"
+            }
+          }
+        },
+
+        "marks": [{
+          "type": "text",
+          "from": {
+            "data": "table"
+          },
+          "encode": {
+            "enter": {
+              "x": {
+                "field": {
+                  "group": "width"
+                },
+                "mult": 0.5
+              },
+              "y": {
+                "field": {
+                  "group": "height"
+                },
+                "mult": 0.5
+              },
+              "radius": {
+                "scale": "value",
+                "field": "value",
+                "offset": 8
+              },
+              "theta": {
+                "signal": "(datum.startAngle + datum.endAngle)/2"
+              },
+              "fill": {
+                "value": "#000"
+              },
+              "align": {
+                "value": "center"
+              },
+              "baseline": {
+                "value": "middle"
+              },
+              "text": {
+                "field": "data"
+              }
+            }
+          }
+        }]
+      }]
+    }
+
+    window.onload = function() {
+      render(yourVlSpec);
+
+      document.getElementById('btn-download').addEventListener('click', function() {
+        // generate a PNG snapshot and then download the image
+        view.toImageURL('svg').then(function(url) {
+          var link = document.createElement('a');
+          link.setAttribute('href', url);
+          link.setAttribute('target', '_blank');
+          link.setAttribute('download', 'vega-export.svg');
+          link.dispatchEvent(new MouseEvent('click'));
+        }).catch(console.error);
+      })
+    }
+  </script>
+</body>
+
+</html>
